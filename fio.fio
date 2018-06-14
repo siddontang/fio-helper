@@ -1,0 +1,24 @@
+[global]
+name="FIO test"
+filename=test
+filesize=2g
+thread
+runtime=60
+
+[read]
+stonewall
+
+[write]
+stonewall
+
+[readwrite]
+stonewall
+
+[randread]
+stonewall
+
+[randwrite]
+stonewall
+
+[randrw]
+stonewall
