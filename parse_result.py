@@ -3,30 +3,18 @@ import os
 import json
 
 def parse_job(job, data):
-    bw_avg = str(job["bw"])
-    bw_min = str(job["bw_min"])
-    bw_max = str(job["bw_max"])
-    # bw_agg = str(job["bw_agg"])
-    # bw_mean = str(job["bw_mean"])
-    # bw_dev = str(job["bw_dev"])
-    iops_avg = str(job["iops"])
-    iops_min = str(job["iops_min"])
-    iops_max = str(job["iops_max"])
-    # iops_mean = str(job["iops_mean"])
-    # iops_stddev = str(job["iops_stddev"])
-    # slat_min = str(job["slat_ns"]["min"])
-    # slat_max = str(job["slat_ns"]["max"])
-    # slat_mean = str(job["slat_ns"]["mean"])
-    # slat_stddev = str(job["slat_ns"]["stddev"])
-    # clat_min = str(job["clat_ns"]["min"])
-    # clat_max = str(job["clat_ns"]["max"])
-    # clat_mean = str(job["clat_ns"]["mean"])
-    # clat_stddev = str(job["clat_ns"]["stddev"])
-    lat_min = str(job["lat_ns"]["min"])
-    lat_max = str(job["lat_ns"]["max"])
-    lat_mean = str(job["lat_ns"]["mean"])
-    # lat_stddev = str(job["lat_ns"]["stddev"])
+    bw_avg = "{:.1f}M/s".format(job["bw"] / 1024.0)
+    bw_min = "{:.1f}M/s".format(job["bw_min"] / 1024.0) 
+    bw_max = "{:.1f}M/s".format(job["bw_max"] / 1024.0) 
 
+    iops_avg = "{:.1f}".format(job["iops"])
+    iops_min = "{:.1f}".format(job["iops_min"])
+    iops_max = "{:.1f}".format(job["iops_max"])
+    
+    lat_min = "{:.1f}us".format(job["lat_ns"]["min"] / 1000.0)
+    lat_max = "{:.1f}us".format(job["lat_ns"]["max"] / 1000.0)
+    lat_mean = "{:.1f}us".format(job["lat_ns"]["mean"] / 1000.0)
+    
     data.extend([bw_avg, bw_min, bw_max, iops_avg, iops_min, iops_max, lat_min, lat_max, lat_mean])
     return data
 
@@ -57,7 +45,7 @@ def parse_file(res, name):
         else:
             row.append("cache")
 
-        row.extend(["job" + str(index), str(data["disk_util"][0]["util"])])            
+        row.extend(["job" + str(index), "{:.2f}%".format(data["disk_util"][0]["util"])])            
 
         if jobname.find("read") > -1 or jobname.find("rw") > -1:
             row = parse_job(job["read"], row)
@@ -83,7 +71,15 @@ def main():
     for file in files:
         parse_file(res, os.path.join(log_dir, file))
 
-    for jobname, rows in res.iteritems():
+    jobnames = ["read", "randread", "write", "randwrite", "readwrite", "randrw"]
+    for jobname in jobnames:
+        if jobname not in res:
+            continue
+
+        rows = res[jobname]
+
+        print "##", jobname, "\n"
+
         if jobname.find("readwrite") > -1 or jobname.find("rw") > - 1:
             print "|" + jobname + "|bs|jobs|ext|job|util|r bw avg|r bw min|r bw max|r iops avg|r iops min|r iops max|r lat min|r lat max|r lat mean|w bw avg|w bw min|w bw max|w iops avg|w iops min|w iops max|w lat min|w lat max|w lat mean|"
             print "| --- " * 24 + "|"
@@ -93,6 +89,8 @@ def main():
 
         for row in rows:
             print "| " + " | ".join(row) + " |"
+
+        print "\n"
 
             
 
