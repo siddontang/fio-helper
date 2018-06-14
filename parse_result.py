@@ -3,19 +3,13 @@ import os
 import json
 
 def parse_job(job, data):
-    bw_avg = "{:.1f}M/s".format(job["bw"] / 1024.0)
-    bw_min = "{:.1f}M/s".format(job["bw_min"] / 1024.0) 
-    bw_max = "{:.1f}M/s".format(job["bw_max"] / 1024.0) 
-
-    iops_avg = "{:.1f}".format(job["iops"])
-    iops_min = "{:.1f}".format(job["iops_min"])
-    iops_max = "{:.1f}".format(job["iops_max"])
+    bw = "{:.1f}M/s".format(job["bw_mean"] / 1024.0)
     
-    lat_min = "{:.1f}us".format(job["lat_ns"]["min"] / 1000.0)
-    lat_max = "{:.1f}us".format(job["lat_ns"]["max"] / 1000.0)
-    lat_mean = "{:.1f}us".format(job["lat_ns"]["mean"] / 1000.0)
+    iops = "{:.1f}".format(job["iops_mean"])
     
-    data.extend([bw_avg, bw_min, bw_max, iops_avg, iops_min, iops_max, lat_min, lat_max, lat_mean])
+    lat = "{:.1f}us".format(job["lat_ns"]["mean"] / 1000.0)
+    
+    data.extend([bw, iops, lat])
     return data
 
 
@@ -81,11 +75,11 @@ def main():
         print "##", jobname, "\n"
 
         if jobname.find("readwrite") > -1 or jobname.find("rw") > - 1:
-            print "|" + jobname + "|bs|jobs|ext|job|util|r bw avg|r bw min|r bw max|r iops avg|r iops min|r iops max|r lat min|r lat max|r lat mean|w bw avg|w bw min|w bw max|w iops avg|w iops min|w iops max|w lat min|w lat max|w lat mean|"
-            print "| --- " * 24 + "|"
+            print "|" + jobname + "|bs|jobs|ext|job|util|r bw|r iops|r lat|r bw|w iops|w lat|"
+            print "| --- " * 12 + "|"
         else:
-            print "|" + jobname + "|bs|jobs|ext|job|util|bw avg|bw min|bw max|iops avg|iops min|iops max|lat min|lat max|lat mean|"
-            print "| --- " * 15 + "|"
+            print "|" + jobname + "|bs|jobs|ext|job|util|bw|iops|lat|"
+            print "| --- " * 9 + "|"
 
         for row in rows:
             print "| " + " | ".join(row) + " |"
