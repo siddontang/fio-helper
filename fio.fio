@@ -6,19 +6,25 @@ thread
 runtime=60
 
 [read]
+bw=read
 stonewall
 
 [write]
+bw=write
 stonewall
 
 [readwrite]
+bw=readwrite
 stonewall
 
 [randread]
+bw=randread
 stonewall
 
 [randwrite]
+bw=randwrite
 stonewall
 
 [randrw]
+bw=randrw
 stonewall
