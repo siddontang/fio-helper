@@ -2,6 +2,7 @@
 
 DIR=${DIR=./}
 OUTPUT=${OUTPUT=./log}
+SIZE=${SIZE=1g}
 
 mkdir -p ${OUTPUT}/com ${OUTPUT}/mixread ${OUTPUT}/var-bs
 
@@ -9,7 +10,7 @@ args="
     --directory ${DIR} \
     --output-format json \
     -filename=test \
-    -filesize=16m \
+    -filesize=${SIZE} \
     -thread \
     -runtime=60 \
     -numjobs=4 \
