@@ -57,7 +57,7 @@ def main():
             if len(stats) == 0:
                 continue
 
-            f.write_stats(stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.read.lat_mean))
+            f.write_stats(stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.read.bw))
 
 
     with Output(output, "read70-bandwidth") as f:
@@ -68,7 +68,7 @@ def main():
             if len(stats) == 0:
                 continue
 
-            f.write_stats(stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.read.lat_p99))
+            f.write_stats(stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.read.bw))
    
 
 if __name__ == "__main__":

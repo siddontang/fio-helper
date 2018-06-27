@@ -15,8 +15,6 @@ class SubJobStat:
         self.lat_p99 += job["clat_ns"]["percentile"]["99.000000"] / 1000.0
 
     def adjust(self, job_count):
-        self.bw /= job_count
-        self.iops /= job_count
         self.lat_mean /= job_count
         self.lat_p99 /= job_count
 
