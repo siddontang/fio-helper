@@ -2,3 +2,4 @@ log
 test
 output
 __pycache__
+*.pyc
