@@ -57,9 +57,10 @@ def main():
             if len(stats) == 0:
                 continue
 
-            f.write_stats("Reads", stats, lambda stat: "%.1f" % (stat.read.bw))
-            f.write_stats("Writes", stats, lambda stat: "%.1f" % (stat.write.bw))
-            f.write_stats("Combines", stats, lambda stat: "%.1f" % (stat.read.bw + stat.write.bw))
+            disk_name = stats[0].disk_name
+            f.write_stats("%s-Reads" % disk_name, stats, lambda stat: "%.1f" % (stat.read.bw))
+            f.write_stats("%s-Writes" % disk_name, stats, lambda stat: "%.1f" % (stat.write.bw))
+            f.write_stats("%s-Combines" % disk_name, stats, lambda stat: "%.1f" % (stat.read.bw + stat.write.bw))
 
     with Output(output, "mix-read-var-write-bandwidth") as f:
         f.write_head("label,100%,90%,80%,70%,60%,50%")   
@@ -71,7 +72,7 @@ def main():
             if len(stats) == 0:
                 continue
 
-            f.write_stats("4KB Write", stats, lambda stat: "%.1f" % (stat.read.bw + stat.write.bw))
+            f.write_stats("%s-4KB Write" % stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.read.bw + stat.write.bw))
             
         for stats in lats:
             stats = filter_stats_by_rwmixread(stats, 
@@ -79,7 +80,7 @@ def main():
             if len(stats) == 0:
                 continue
 
-            f.write_stats("128KB Write", stats, lambda stat: "%.1f" % (stat.read.bw + stat.write.bw))
+            f.write_stats("%s-128KB Write" % stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.read.bw + stat.write.bw))
     
    
 

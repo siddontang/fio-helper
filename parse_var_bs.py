@@ -41,7 +41,7 @@ def main():
         lats.append(stats)
 
 
-    with Output(output, "read-var-bs-lat-mean") as f:
+    with Output(output, "read100-bs-lat-mean") as f:
         f.write_head("label,1,2,4,8")   
 
 
@@ -53,10 +53,10 @@ def main():
                 if len(stats) == 0:
                     continue
 
-                f.write_stats(bs, stats, lambda stat: "%.1f" % (stat.read.lat_mean))
+                f.write_stats("%s-%s" % (stats[0].disk_name, bs), stats, lambda stat: "%.1f" % (stat.read.lat_mean))
 
 
-    with Output(output, "read-var-bs-lat-p99") as f:
+    with Output(output, "read100-bs-lat-p99") as f:
         f.write_head("label,1,2,4,8")   
 
 
@@ -68,7 +68,7 @@ def main():
                 if len(stats) == 0:
                     continue
 
-                f.write_stats(bs, stats, lambda stat: "%.1f" % (stat.read.lat_p99))
+                f.write_stats("%s-%s" % (stats[0].disk_name, bs), stats, lambda stat: "%.1f" % (stat.read.lat_p99))
 
 
 

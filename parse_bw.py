@@ -47,7 +47,7 @@ def main():
         lats.append(stats)
 
 
-    with Output(output, "read-bandwidth") as f:
+    with Output(output, "read100-bandwidth") as f:
         f.write_head("label,1,2,4,8,16,32")   
 
 
@@ -69,6 +69,29 @@ def main():
                 continue
 
             f.write_stats(stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.read.bw))
+
+    with Output(output, "write100-bandwidth") as f:
+        f.write_head("label,1,2,4,8,16,32")   
+
+
+        for stats in lats:
+            stats = filter_stats(stats, 
+                lambda stat: stat.bs == "4k" and stat.rwmixread == 0 and stat.iodepth in iodepts)
+            if len(stats) == 0:
+                continue
+
+            f.write_stats(stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.write.bw))
+
+
+    with Output(output, "write30-bandwidth") as f:
+        f.write_head("label,1,2,4,8,16,32")
+
+        for stats in lats:
+            stats = filter_stats(stats, lambda stat: stat.bs == "4k" and stat.rwmixread == 70 and stat.iodepth in iodepts)
+            if len(stats) == 0:
+                continue
+
+            f.write_stats(stats[0].disk_name, stats, lambda stat: "%.1f" % (stat.write.bw))
    
 
 if __name__ == "__main__":
